@@ -11,13 +11,21 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip install -r requirements.txt'
+                sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Run Tests with Pytest') {
             steps {
-                sh 'pytest --maxfail=1 --disable-warnings -q'
+                sh '''
+                    . venv/bin/activate
+                    pytest --maxfail=1 --disable-warnings -q
+                '''
             }
         }
     }
@@ -31,3 +39,4 @@ pipeline {
         }
     }
 }
+
